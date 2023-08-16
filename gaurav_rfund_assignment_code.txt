@@ -1,0 +1,93 @@
+import streamlit as st
+import pandas as pd
+import yfinance as yf
+import plotly.express as px
+
+
+#title of the application
+st.title("Stock Price Monitoring Application")
+
+# Reading the csv
+df = pd.read_csv(r"D:\Sql_Practice\rfund_assignment\assignment_yahoo_ticker_symbols.csv", encoding='latin1')
+
+# Dropping all the null values
+df.dropna(inplace=True)
+
+# Code for extracting all the ticker name into one list
+ticker_lst = df['Ticker'].tolist()
+
+# Code for extracting all the company name into one list
+name_lst = df['Name'].tolist()
+
+# Creating a dictionary to map the name of the company with its ticker
+ticker_name = dict(zip(ticker_lst, name_lst))
+
+# Creating a user interface for the user to select the stocks
+# Now using the list to create a select box from where the user can select stock or company name
+tickers = ticker_lst
+company_name = name_lst
+
+st.sidebar.header("Stock Selection")
+selected_tickers = st.sidebar.multiselect("Select Tickers or company name", tickers + company_name)
+start_date = st.sidebar.date_input("Start Date")
+end_date = st.sidebar.date_input("End Date")
+interval = st.sidebar.selectbox("Select Data Interval", ["1m", "2m", "5m", "15m", "30m", "60m", "90m", "1h", "1d", "5d", "1wk", "1mo", "3mo"])
+
+# Display the required duration message based on the selected interval
+if interval in ["1m", "2m", "5m", "15m", "30m", "60m", "90m", "1h"]:
+    st.sidebar.info("Selected interval requires a minimum of 7 days of historical data.")
+elif interval in ["1d", "5d", "1wk"]:
+    st.sidebar.info("Selected interval requires a minimum of 30 days of historical data.")
+elif interval in ["1mo", "3mo"]:
+    st.sidebar.info("Selected interval requires a months gap of historical data.")
+
+# Create a new list to store the selected tickers
+selected_tickers_list = []
+
+# If the user selects the ticker or company name
+for i in selected_tickers:
+    if i in tickers:
+        selected_tickers_list.append(i)
+    elif i in company_name:
+        for ticker, name in ticker_name.items():
+            if name == i:
+                selected_tickers_list.append(ticker)
+
+# Display stock information for selected tickers
+for ticker in selected_tickers_list:
+    try:
+        data = yf.download(ticker, start=start_date, end=end_date, interval=interval)
+
+        # Giving different visualizations according to the number of stocks the user selects
+        if len(selected_tickers_list) == 1:
+            st.subheader(f"Stock: {ticker}")
+            st.write(data)
+            # Display table and line chart for single stock
+            st.subheader("Stock Representation")
+
+            # Plotting line chart using Plotly Express for opening
+            fig = px.line(data, x=data.index, y="Open", title="Stock Opening Prices")
+            st.plotly_chart(fig)
+            
+            # Plotting line chart using Plotly Express for closing
+            fig = px.line(data, x=data.index, y="Close", title="Stock Closing Prices")
+            st.plotly_chart(fig)
+
+        elif len(selected_tickers_list) > 1:
+            # Display table for multiple stocks
+            st.subheader(f"Stock: {ticker}")
+            st.write(data)
+
+            st.subheader("Stock Representation")
+            
+            # Plotting line chart using Plotly Express for opening
+            fig = px.line(data, x=data.index, y="Open", title="Stock Opening Prices")
+            st.plotly_chart(fig)
+            
+            # Plotting line chart using Plotly Express for closing
+            fig = px.line(data, x=data.index, y="Close", title="Stock Closing Prices")
+            st.plotly_chart(fig)
+
+    except Exception as e:
+        error_message = "Error fetching data. Please check your internet connection and try again."
+        st.error(error_message)
