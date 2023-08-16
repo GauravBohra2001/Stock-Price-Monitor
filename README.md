@@ -14,6 +14,12 @@ Stock Price Monitor is a Python application built using Streamlit, pandas, yfina
 
 ## Usage
 
+1. Enter a stock symbol in the input field.
+2. Click the "Get Stock Prices" button.
+3. View the historical stock prices plotted on the interactive graph.
+
+
+# Output
 
 ![Project_1](https://github.com/GauravBohra2001/Stock-Price-Monitor/assets/113661738/7cdcac25-d6b4-45b5-8646-8fd840e656f1)
 
@@ -31,8 +37,6 @@ Stock Price Monitor is a Python application built using Streamlit, pandas, yfina
 
 
 
-1. Enter a stock symbol in the input field.
-2. Click the "Get Stock Prices" button.
-3. View the historical stock prices plotted on the interactive graph.
 
-# Output
+
+
