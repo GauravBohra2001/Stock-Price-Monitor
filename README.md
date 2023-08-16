@@ -35,6 +35,7 @@ User can select company name as well stock name from the drop-down list and can 
 ![Project_5](https://github.com/GauravBohra2001/Stock-Price-Monitor/assets/113661738/e2435a52-27f0-4de8-804c-ae2d96c397ad)
 
 User can select single or multiple stock from the side bar and also select different data interval and get suggestion on time period like for a given refresh interval what should be the time period
+
 ![Project_6](https://github.com/GauravBohra2001/Stock-Price-Monitor/assets/113661738/031d5ef9-5fc2-4503-bc2a-38844717fdb7)
 
 ![Project_7](https://github.com/GauravBohra2001/Stock-Price-Monitor/assets/113661738/d0c5d05a-3159-4567-8bf1-c05371b493d7)
